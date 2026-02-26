@@ -1,0 +1,19 @@
+{
+  "name": "oasicord",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-powered fashion assistant app with React Native frontend and polyglot microservices backend",
+  "workspaces": [
+    "apps/*",
+    "services/api-gateway"
+  ],
+  "scripts": {
+    "mobile": "npm run start --workspace=apps/mobile",
+    "gateway": "npm run dev --workspace=services/api-gateway",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "^3.2.0"
+  }
+}

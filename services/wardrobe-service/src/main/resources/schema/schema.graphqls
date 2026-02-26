@@ -1,0 +1,29 @@
+type Query {
+  wardrobeItems(userId: ID): [ClothingItem!]!
+}
+
+type Mutation {
+  addClothingItem(input: AddClothingInput!): ClothingItem!
+}
+
+type ClothingItem @key(fields: "id") {
+  id: ID!
+  userId: ID!
+  name: String!
+  category: String!
+  tags: [String!]!
+  colors: [String!]!
+  season: [String!]!
+  imageUrl: String!
+  segmentedImageUrl: String
+  model3dUrl: String
+}
+
+input AddClothingInput {
+  name: String!
+  category: String!
+  tags: [String!]
+  colors: [String!]
+  season: [String!]
+  imageUrl: String!
+}

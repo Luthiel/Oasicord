@@ -1,0 +1,39 @@
+{
+  "name": "fashion-assistant-mobile",
+  "version": "1.0.0",
+  "main": "App.tsx",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "lint": "eslint . --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.9.0",
+    "@react-navigation/bottom-tabs": "^6.5.0",
+    "@react-navigation/native": "^6.1.0",
+    "@react-navigation/native-stack": "^6.9.0",
+    "expo": "~50.0.0",
+    "expo-camera": "~14.0.0",
+    "expo-constants": "~15.4.0",
+    "expo-location": "~16.5.0",
+    "expo-status-bar": "~1.11.0",
+    "graphql": "^16.8.0",
+    "react": "18.2.0",
+    "react-native": "0.73.0",
+    "react-native-paper": "^5.12.0",
+    "react-native-safe-area-context": "4.8.2",
+    "react-native-screens": "~3.29.0",
+    "react-native-vector-icons": "^10.0.0",
+    "zustand": "^4.5.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@types/react": "~18.2.0",
+    "babel-plugin-module-resolver": "^5.0.0",
+    "typescript": "^5.3.0"
+  },
+  "private": true
+}

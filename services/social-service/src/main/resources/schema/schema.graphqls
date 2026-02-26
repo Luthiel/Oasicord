@@ -1,0 +1,33 @@
+type Query {
+  socialFeed(limit: Int, offset: Int): [Post!]!
+}
+
+type Mutation {
+  createPost(input: CreatePostInput!): Post!
+  likePost(postId: ID!): Post!
+}
+
+type Post @key(fields: "id") {
+  id: ID!
+  userId: ID!
+  outfitId: ID
+  caption: String
+  mediaUrls: [String!]!
+  likesCount: Int!
+  commentsCount: Int!
+  createdAt: String!
+}
+
+type Comment {
+  id: ID!
+  postId: ID!
+  userId: ID!
+  content: String!
+  createdAt: String!
+}
+
+input CreatePostInput {
+  outfitId: ID
+  caption: String
+  mediaUrls: [String!]
+}

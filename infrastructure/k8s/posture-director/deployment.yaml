@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posture-director
+  namespace: fashion-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: posture-director
+  template:
+    metadata:
+      labels:
+        app: posture-director
+    spec:
+      containers:
+        - name: posture-director
+          image: fashion-assistant/posture-director:latest
+          ports:
+            - containerPort: 8086
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8086
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posture-director
+  namespace: fashion-assistant
+spec:
+  selector:
+    app: posture-director
+  ports:
+    - port: 8086
+      targetPort: 8086

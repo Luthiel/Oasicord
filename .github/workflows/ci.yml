@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-mobile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: cd apps/mobile && npm ci
+      - run: cd apps/mobile && npm run typecheck
+
+  build-gateway:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: cd services/api-gateway && npm ci
+      - run: cd services/api-gateway && npm run build
+
+  test-python-services:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - fashion-transform
+          - scene-recommender
+          - posture-director
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: cd services/${{ matrix.service }} && pip install -r requirements.txt
+      - run: cd services/${{ matrix.service }} && python -c "from src.main import app; print('OK')"
+
+  build-go-services:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - media-storage
+          - location-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - run: cd services/${{ matrix.service }} && go build ./...
+
+  build-docker:
+    runs-on: ubuntu-latest
+    needs:
+      - lint-mobile
+      - build-gateway
+      - test-python-services
+      - build-go-services
+    strategy:
+      matrix:
+        service:
+          - api-gateway
+          - fashion-transform
+          - scene-recommender
+          - posture-director
+          - media-storage
+          - location-service
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t ${{ matrix.service }}:test ./services/${{ matrix.service }}

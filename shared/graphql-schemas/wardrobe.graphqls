@@ -1,0 +1,76 @@
+# Wardrobe Service Schema (Federation)
+
+extend schema @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key"])
+
+type Query {
+  wardrobeItems(userId: ID, category: String, season: String): [ClothingItem!]!
+  outfit(id: ID!): Outfit
+  generateOutfitRecommendations(mood: String!, occasion: String): [Outfit!]!
+}
+
+type Mutation {
+  addClothingItem(input: AddClothingInput!): ClothingItem!
+  deleteClothingItem(id: ID!): Boolean!
+  generate3DModel(clothingId: ID!): ClothingItem!
+  saveOutfit(input: SaveOutfitInput!): Outfit!
+}
+
+type Subscription {
+  clothingProcessingStatus(clothingId: ID!): ProcessingStatus!
+}
+
+type ClothingItem @key(fields: "id") {
+  id: ID!
+  userId: ID!
+  name: String!
+  category: String!
+  tags: [String!]!
+  colors: [String!]!
+  season: [String!]!
+  imageUrl: String!
+  segmentedImageUrl: String
+  model3dUrl: String
+}
+
+type Outfit @key(fields: "id") {
+  id: ID!
+  userId: ID!
+  name: String!
+  items: [OutfitItem!]!
+  mood: String
+  occasion: String
+  recommendationScore: Float
+}
+
+type OutfitItem {
+  clothingId: ID!
+  layer: String!
+}
+
+type ProcessingStatus {
+  clothingId: ID!
+  stage: String!
+  progress: Float!
+  completed: Boolean!
+}
+
+input AddClothingInput {
+  name: String!
+  category: String!
+  tags: [String!]
+  colors: [String!]
+  season: [String!]
+  imageUrl: String!
+}
+
+input SaveOutfitInput {
+  name: String!
+  items: [OutfitItemInput!]!
+  mood: String
+  occasion: String
+}
+
+input OutfitItemInput {
+  clothingId: ID!
+  layer: String!
+}
