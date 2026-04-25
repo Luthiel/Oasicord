@@ -1,0 +1,64 @@
+# Shared scalars and enums used across all services
+
+scalar DateTime
+scalar JSON
+
+enum Season {
+  SPRING
+  SUMMER
+  FALL
+  WINTER
+}
+
+enum ClothingCategory {
+  TOP
+  BOTTOM
+  OUTERWEAR
+  DRESS
+  SHOES
+  ACCESSORY
+}
+
+enum ArtStyle {
+  THREE_D
+  CARTOON
+  CLAY
+}
+
+enum DifficultyLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+# Shared scalars and enums used across all services
+
+scalar DateTime
+scalar JSON
+
+enum Season {
+  SPRING
+  SUMMER
+  FALL
+  WINTER
+}
+
+enum ClothingCategory {
+  TOP
+  BOTTOM
+  OUTERWEAR
+  DRESS
+  SHOES
+  ACCESSORY
+}
+
+enum ArtStyle {
+  THREE_D
+  CARTOON
+  CLAY
+}
+
+enum DifficultyLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}

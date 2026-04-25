@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scene-recommender
+  namespace: fashion-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scene-recommender
+  template:
+    metadata:
+      labels:
+        app: scene-recommender
+    spec:
+      containers:
+        - name: scene-recommender
+          image: fashion-assistant/scene-recommender:latest
+          ports:
+            - containerPort: 8085
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8085
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scene-recommender
+  namespace: fashion-assistant
+spec:
+  selector:
+    app: scene-recommender
+  ports:
+    - port: 8085
+      targetPort: 8085

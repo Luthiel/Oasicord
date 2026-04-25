@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: media-storage
+  namespace: fashion-assistant
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: media-storage
+  template:
+    metadata:
+      labels:
+        app: media-storage
+    spec:
+      containers:
+        - name: media-storage
+          image: fashion-assistant/media-storage:latest
+          ports:
+            - containerPort: 8087
+          envFrom:
+            - secretRef:
+                name: media-storage-secrets
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8087
+            initialDelaySeconds: 5
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: media-storage
+  namespace: fashion-assistant
+spec:
+  selector:
+    app: media-storage
+  ports:
+    - port: 8087
+      targetPort: 8087

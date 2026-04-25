@@ -1,0 +1,53 @@
+# Social Service Schema (Federation)
+
+extend schema @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key"])
+
+type Query {
+  socialFeed(limit: Int, offset: Int): [Post!]!
+  userPosts(userId: ID!): [Post!]!
+}
+
+type Mutation {
+  createPost(input: CreatePostInput!): Post!
+  likePost(postId: ID!): Post!
+  commentOnPost(postId: ID!, content: String!): Comment!
+  followUser(userId: ID!): Boolean!
+}
+
+type Subscription {
+  newNotification: Notification!
+}
+
+type Post @key(fields: "id") {
+  id: ID!
+  userId: ID!
+  outfitId: ID
+  caption: String
+  mediaUrls: [String!]!
+  likesCount: Int!
+  commentsCount: Int!
+  isLikedByMe: Boolean!
+  createdAt: String!
+}
+
+type Comment {
+  id: ID!
+  postId: ID!
+  userId: ID!
+  content: String!
+  createdAt: String!
+}
+
+type Notification {
+  id: ID!
+  userId: ID!
+  type: String!
+  message: String!
+  createdAt: String!
+}
+
+input CreatePostInput {
+  outfitId: ID
+  caption: String
+  mediaUrls: [String!]
+}

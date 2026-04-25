@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "FashionAssistant",
+    "slug": "fashion-assistant",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.oasicord.fashionassistant",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to photograph your clothing items.",
+        "NSLocationWhenInUseUsageDescription": "This app uses your location to recommend nearby photo spots."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.oasicord.fashionassistant",
+      "permissions": ["CAMERA", "ACCESS_FINE_LOCATION"]
+    },
+    "plugins": ["expo-camera", "expo-location"]
+  }
+}

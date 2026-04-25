@@ -1,0 +1,38 @@
+server:
+  port: ${PORT:8082}
+
+spring:
+  application:
+    name: wardrobe-service
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/fashion_wardrobe}
+
+dgs:
+  graphql:
+    path: /graphql
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+server:
+  port: ${PORT:8082}
+
+spring:
+  application:
+    name: wardrobe-service
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/fashion_wardrobe}
+
+dgs:
+  graphql:
+    path: /graphql
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

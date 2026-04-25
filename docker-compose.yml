@@ -1,0 +1,145 @@
+version: "3.9"
+
+services:
+  # ── Databases ──
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - fashion-net
+
+  mongodb:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - fashion-net
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - fashion-net
+
+  # ── API Gateway ──
+  api-gateway:
+    build: ./services/api-gateway
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: "4000"
+      USER_SERVICE_URL: http://user-service:8081/graphql
+      WARDROBE_SERVICE_URL: http://wardrobe-service:8082/graphql
+      SOCIAL_SERVICE_URL: http://social-service:8083/graphql
+    depends_on:
+      - user-service
+      - wardrobe-service
+      - social-service
+    networks:
+      - fashion-net
+
+  # ── Kotlin Services ──
+  user-service:
+    build: ./services/user-service
+    ports:
+      - "8081:8081"
+    environment:
+      PORT: "8081"
+      DB_URL: jdbc:postgresql://postgres:5432/fashion_users
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      - postgres
+    networks:
+      - fashion-net
+
+  wardrobe-service:
+    build: ./services/wardrobe-service
+    ports:
+      - "8082:8082"
+    environment:
+      PORT: "8082"
+      MONGODB_URI: mongodb://mongodb:27017/fashion_wardrobe
+    depends_on:
+      - mongodb
+    networks:
+      - fashion-net
+
+  social-service:
+    build: ./services/social-service
+    ports:
+      - "8083:8083"
+    environment:
+      PORT: "8083"
+      DB_URL: jdbc:postgresql://postgres:5432/fashion_social
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      - postgres
+    networks:
+      - fashion-net
+
+  # ── Python AI Services ──
+  fashion-transform:
+    build: ./services/fashion-transform
+    ports:
+      - "8084:8084"
+    environment:
+      PORT: "8084"
+    networks:
+      - fashion-net
+
+  scene-recommender:
+    build: ./services/scene-recommender
+    ports:
+      - "8085:8085"
+    environment:
+      PORT: "8085"
+    networks:
+      - fashion-net
+
+  posture-director:
+    build: ./services/posture-director
+    ports:
+      - "8086:8086"
+    environment:
+      PORT: "8086"
+    networks:
+      - fashion-net
+
+  # ── Go Services ──
+  media-storage:
+    build: ./services/media-storage
+    ports:
+      - "8087:8087"
+    environment:
+      PORT: "8087"
+    networks:
+      - fashion-net
+
+  location-service:
+    build: ./services/location-service
+    ports:
+      - "8088:8088"
+    environment:
+      PORT: "8088"
+    networks:
+      - fashion-net
+
+volumes:
+  postgres_data:
+  mongo_data:
+
+networks:
+  fashion-net:
+    driver: bridge

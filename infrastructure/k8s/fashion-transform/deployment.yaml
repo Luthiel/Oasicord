@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fashion-transform
+  namespace: fashion-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fashion-transform
+  template:
+    metadata:
+      labels:
+        app: fashion-transform
+    spec:
+      containers:
+        - name: fashion-transform
+          image: fashion-assistant/fashion-transform:latest
+          ports:
+            - containerPort: 8084
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8084
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fashion-transform
+  namespace: fashion-assistant
+spec:
+  selector:
+    app: fashion-transform
+  ports:
+    - port: 8084
+      targetPort: 8084
